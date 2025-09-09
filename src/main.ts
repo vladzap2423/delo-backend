@@ -1,0 +1,28 @@
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { UsersService } from './users/users.service';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  const port = process.env.API_PORT || 3000; // API_PORT из .env
+  await app.listen(port);
+
+  console.log(`🚀 Server is running on http://localhost:${port}`);
+
+
+  // Автосоздание админа
+  const usersService = app.get(UsersService);
+  const admin = await usersService.findByUsername('gp1Admin');
+  if (!admin) {
+    await usersService.createUser({
+      username: 'gp1Admin',
+      password: '123qweQWE',
+      fio: 'Администратор',
+      post: 'Администратор',
+      role: 'admin',
+    });
+    console.log('✅ Администратор gp1Admin создан');
+  }
+}
+bootstrap();

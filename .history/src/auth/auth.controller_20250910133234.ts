@@ -10,7 +10,7 @@ export class AuthController {
         @Body() body: { username: string; password: string },
     ) {
         const user = await this.authService.validateUser(body.username, body.password);
-        if (!user) throw new UnauthorizedException('Неверный логин или пароль');
+        if (!user) throw new UnauthorizedException('Неверный username или пароль');
 
         return this.authService.login(user);
     }

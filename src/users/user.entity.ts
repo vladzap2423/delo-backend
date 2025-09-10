@@ -18,7 +18,7 @@ export class User {
     post: string;
 
     @Column({ default: 'user' })
-    role: 'user' | 'admin';
+    role: string;
 
     @Column({ default: true })
     isActive: boolean;

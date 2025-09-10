@@ -4,17 +4,15 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
-import { CurrentUser } from 'src/common/edcorators/user.decorator';
-import { User } from './user.entity';
 
 @Controller('users')
 export class UsersController {
     constructor(private userService: UsersService) { }
 
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
+    //@UseGuards(JwtAuthGuard, RolesGuard)
     @Post()
-    @Roles('admin')
+    //@Roles('admin')
     async createUser(
         @Body() body: { username: string; password: string; fio: string; post: string; role?: string },
     ) {
@@ -28,20 +26,11 @@ export class UsersController {
 
     }
 
-    @UseGuards(JwtAuthGuard)
-    @Roles('admin')
+    //@UseGuards(JwtAuthGuard)
     @Get()
     async getAllUsers() {
         const users = await this.userService.getAllUsers()
         return users
     }
-
-    @UseGuards(JwtAuthGuard)
-    @Get('me')
-    async getProfile(@CurrentUser() user: any): Promise<User | null> {
-        return this.userService.findOne(user.id);
-    }
-
-
 
 }

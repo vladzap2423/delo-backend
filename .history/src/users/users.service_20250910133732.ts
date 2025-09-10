@@ -40,8 +40,4 @@ export class UsersService {
             select: ['id', 'username', 'post', 'fio', 'role', 'isActive']
         })
     }
-
-    async findOne(id: number): Promise<User | null> {
-    return this.userRepository.findOne({ where: { id } });
-    }
 }

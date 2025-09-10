@@ -42,6 +42,6 @@ export class UsersService {
     }
 
     async findOne(id: number): Promise<User | null> {
-    return this.userRepository.findOne({ where: { id } });
+    return this.usersRepository.findOne({ where: { id } });
     }
 }

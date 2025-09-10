@@ -4,8 +4,6 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
-import { CurrentUser } from 'src/common/edcorators/user.decorator';
-import { User } from './user.entity';
 
 @Controller('users')
 export class UsersController {
@@ -35,13 +33,5 @@ export class UsersController {
         const users = await this.userService.getAllUsers()
         return users
     }
-
-    @UseGuards(JwtAuthGuard)
-    @Get('me')
-    async getProfile(@CurrentUser() user: any): Promise<User | null> {
-        return this.userService.findOne(user.id);
-    }
-
-
 
 }

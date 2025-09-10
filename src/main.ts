@@ -4,7 +4,11 @@ import { UsersService } from './users/users.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  app.enableCors({
+    origin: process.env.FRFRONTEND_URL || 'http://localhost:3000',
+    credential: true,
+    exposedHeaders: 'set-cookie',
+  })
   const port = process.env.API_PORT || 3000; // API_PORT из .env
   await app.listen(port);
 

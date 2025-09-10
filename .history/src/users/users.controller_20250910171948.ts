@@ -4,8 +4,6 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
-import { CurrentUser } from 'src/common/edcorators/user.decorator';
-import { User } from './user.entity';
 
 @Controller('users')
 export class UsersController {

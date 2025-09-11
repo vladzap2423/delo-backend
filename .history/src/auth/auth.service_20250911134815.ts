@@ -21,10 +21,6 @@ export class AuthService {
             throw new UnauthorizedException("Неверный пароль!");
         }
 
-        if (!user.isActive) {
-            throw new UnauthorizedException("Пользователь деактивирован!");
-        }
-
         return user
     }
 

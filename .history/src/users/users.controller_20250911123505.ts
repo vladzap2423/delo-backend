@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Patch, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -42,7 +42,7 @@ export class UsersController {
         return this.userService.findOne(user.id);
     }
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
+        @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
     @Patch(':id/status')
     async changeStatus(@Param('id') id: number, @Body() body: { isActive: boolean }) {

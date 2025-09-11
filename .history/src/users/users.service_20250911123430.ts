@@ -46,27 +46,27 @@ export class UsersService {
     }
 
     async updateStatus(id: number, isActive: boolean): Promise<User | null> {
-        const user = await this.userRepository.findOne({ where: { id } });
-        if (!user) return null;
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) return null;
 
-        user.isActive = isActive;
-        return this.userRepository.save(user);
-    }
+    user.isActive = isActive;
+    return this.userRepository.save(user);
+  }
 
-    async updateRole(id: number, role: string): Promise<User | null> {
-        const user = await this.userRepository.findOne({ where: { id } });
-        if (!user) return null;
+  async updateRole(id: number, role: string): Promise<User | null> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) return null;
 
-        user.role = role;
-        return this.userRepository.save(user);
-    }
+    user.role = role;
+    return this.userRepository.save(user);
+  }
 
-    async updatePassword(id: number, newPassword: string): Promise<User | null> {
-        const user = await this.userRepository.findOne({ where: { id } });
-        if (!user) return null;
+  async updatePassword(id: number, newPassword: string): Promise<User | null> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) return null;
 
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-        user.password = hashedPassword;
-        return this.userRepository.save(user);
-    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    return this.userRepository.save(user);
+  }
 }

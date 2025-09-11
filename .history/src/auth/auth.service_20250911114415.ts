@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
@@ -12,24 +12,16 @@ export class AuthService {
 
     async validateUser(username: string, password: string) {
         const user = await this.userService.findByUsername(username)
-        if (!user) {
-            throw new UnauthorizedException("Неверный логин!");
-        }
+        if (!user) return null
 
         const isPasswordMatching = await bcrypt.compare(password, user.password)
-        if (!isPasswordMatching) {
-            throw new UnauthorizedException("Неверный пароль!");
-        }
-
-        if (!user.isActive) {
-            throw new UnauthorizedException("Пользователь деактивирован!");
-        }
+        if (!isPasswordMatching) return null
 
         return user
     }
 
     async login(user: any) {
-        const payload = { sub: user.id, username: user.username, role: user.role, isActive: user.isActive }
+        const payload = { sub: user.id, username: user.username, role: user.role, isActive: use }
         return {
             access_token: this.jwtService.sign(payload)
         }

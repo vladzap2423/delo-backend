@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Patch, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -13,8 +13,8 @@ export class UsersController {
 
 
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin')
     @Post()
+    @Roles('admin')
     async createUser(
         @Body() body: { username: string; password: string; fio: string; post: string; role?: string },
     ) {
@@ -28,7 +28,7 @@ export class UsersController {
 
     }
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
+    @UseGuards(JwtAuthGuardб RolesGuard)
     @Roles('admin')
     @Get()
     async getAllUsers() {
@@ -42,25 +42,6 @@ export class UsersController {
         return this.userService.findOne(user.id);
     }
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin')
-    @Patch(':id/status')
-    async changeStatus(@Param('id') id: number, @Body() body: { isActive: boolean }) {
-        return this.userService.updateStatus(id, body.isActive);
-    }
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin')
-    @Patch(':id/role')
-    async changeRole(@Param('id') id: number, @Body() body: { role: string }) {
-        return this.userService.updateRole(id, body.role);
-    }
-
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin')
-    @Patch(':id/password')
-    async changePassword(@Param('id') id: number, @Body() body: { newPassword: string }) {
-        return this.userService.updatePassword(id, body.newPassword);
-    }
 
 }

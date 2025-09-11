@@ -16,13 +16,13 @@ export class AuthService {
             throw new UnauthorizedException("Неверный логин!");
         }
 
+        if (!user.isActive) {
+            throw new UnauthorizedException("Пользователь деактивирован!");
+        }
+
         const isPasswordMatching = await bcrypt.compare(password, user.password)
         if (!isPasswordMatching) {
             throw new UnauthorizedException("Неверный пароль!");
-        }
-
-        if (!user.isActive) {
-            throw new UnauthorizedException("Пользователь деактивирован!");
         }
 
         return user

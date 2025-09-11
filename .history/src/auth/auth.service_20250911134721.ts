@@ -13,16 +13,16 @@ export class AuthService {
     async validateUser(username: string, password: string) {
         const user = await this.userService.findByUsername(username)
         if (!user) {
-            throw new UnauthorizedException("Неверный логин!");
-        }
-
-        const isPasswordMatching = await bcrypt.compare(password, user.password)
-        if (!isPasswordMatching) {
-            throw new UnauthorizedException("Неверный пароль!");
+            throw new UnauthorizedException("Неверный логин или пароль!");
         }
 
         if (!user.isActive) {
             throw new UnauthorizedException("Пользователь деактивирован!");
+        }
+
+        const isPasswordMatching = await bcrypt.compare(password, user.password)
+        if (!isPasswordMatching) {
+            throw new UnauthorizedException("Неверный логин или пароль!");
         }
 
         return user

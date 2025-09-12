@@ -6,7 +6,6 @@ import { User } from './users/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { CommissionModule } from './commissions/commission.module';
 import { Commission } from './commissions/commission.entity';
-import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -30,8 +29,7 @@ import { TaskModule } from './task/task.module';
     }),
     UsersModule,
     AuthModule,
-    CommissionModule,
-    TaskModule
+    CommissionModule
 
   ],
 })

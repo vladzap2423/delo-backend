@@ -5,8 +5,6 @@ import { UsersModule } from './users/users.module';
 import { User } from './users/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { CommissionModule } from './commissions/commission.module';
-import { Commission } from './commissions/commission.entity';
-import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -24,14 +22,13 @@ import { TaskModule } from './task/task.module';
         username: config.get('POSTGRES_USER'),
         password: config.get('POSTGRES_PASSWORD'),
         database: config.get('POSTGRES_DB'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        entities: [User, Commiss],
         synchronize: true,  // для разработки, автоматически создаёт таблицы
       })
     }),
     UsersModule,
     AuthModule,
-    CommissionModule,
-    TaskModule
+    CommissionModule
 
   ],
 })

@@ -62,11 +62,11 @@ export class UsersController {
     async changePassword(@Param('id') id: number, @Body() body: { newPassword: string }) {
         return this.userService.updatePassword(id, body.newPassword);
     }
-
     @UseGuards(JwtAuthGuard)
     @Get('active')
     async getActiveUsers() {
         return this.userService.getActiveUsers();
     }
+
 
 }

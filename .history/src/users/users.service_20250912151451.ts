@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import { Commission } from 'src/commissions/commission.entity';
+import { Commission } from 'src/commissions/commission.entity'; // 👈 импорт Commission
 import * as bcrypt from 'bcrypt';
 
 @Injectable()

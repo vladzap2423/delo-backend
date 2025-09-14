@@ -5,10 +5,11 @@ import {
   ManyToOne,
   OneToMany,
   CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
-import { Commission } from 'src/commissions/commission.entity';
 import { User } from 'src/users/user.entity';
-import { TaskSignature } from './task-signature.entity';
+import { Commission } from 'src/commissions/commission.entity';
+import { TaskSign } from './task-sign.entity';
 
 @Entity('tasks')
 export class Task {
@@ -16,22 +17,30 @@ export class Task {
   id: number;
 
   @Column()
-  fileName: string; // оригинальное имя файла (например "report.pdf")
+  title: string;
 
-  @Column()
-  filePath: string; // путь или URL (например "/uploads/123-report.pdf")
+  // путь к подписанному файлу (в папке)
+  @Column({ nullable: true })
+  filePath: string;
 
+  // кто создал задачу
   @ManyToOne(() => User, { eager: true })
-  createdBy: User; // кто создал задание
+  creator: User;
 
+  // комиссия, назначенная для рассмотрения
   @ManyToOne(() => Commission, { eager: true })
-  commission: Commission; // комиссия, которая рассматривает задание
+  commission: Commission;
 
-  @OneToMany(() => TaskSignature, (signature) => signature.task, {
-    cascade: true,
-  })
-  signatures: TaskSignature[];
+  // статусы подписей
+  @OneToMany(() => TaskSign, (sign) => sign.task, { cascade: true })
+  signs: TaskSign[];
 
   @CreateDateColumn()
-  createdAt: Date; // дата создания
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @Column({ default: 'in_progress' })
+  status: 'in_progress' | 'completed';
 }

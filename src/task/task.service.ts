@@ -2,91 +2,55 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Task } from './task.entity';
-import { TaskSignature } from './task-signature.entity';
-import { Commission } from 'src/commissions/commission.entity';
+import { TaskSign } from './task-sign.entity';
+import { CreateTaskDto } from './dto/create-task.dto';
 import { User } from 'src/users/user.entity';
+import { Commission } from 'src/commissions/commission.entity';
 
 @Injectable()
-export class TaskService {
+export class TasksService {
   constructor(
-    @InjectRepository(Task)
-    private readonly taskRepo: Repository<Task>,
-
-    @InjectRepository(TaskSignature)
-    private readonly signatureRepo: Repository<TaskSignature>,
-
-    @InjectRepository(Commission)
-    private readonly commissionRepo: Repository<Commission>,
-
-    @InjectRepository(User)
-    private readonly userRepo: Repository<User>,
+      @InjectRepository(Task) private tasksRepo: Repository<Task>,
+      @InjectRepository(TaskSign) private taskSignsRepo: Repository<TaskSign>,
+      @InjectRepository(User) private usersRepo: Repository<User>,
+      @InjectRepository(Commission) private commissionsRepo: Repository<Commission>,
   ) {}
 
-  // Создать задание
-  async createTask(
-    fileName: string,
-    filePath: string,
-    createdById: number,
-    commissionId: number,
-  ): Promise<Task> {
-    const creator = await this.userRepo.findOneOrFail({ where: { id: createdById } });
-    const commission = await this.commissionRepo.findOneOrFail({
-      where: { id: commissionId },
-      relations: ['users'],
-    });
+    async create(dto: CreateTaskDto, filePath?: string): Promise<Task> {
+        const creator = await this.usersRepo.findOne({ where: { id: dto.creatorId } });
+        if (!creator) throw new NotFoundException('Creator not found');
 
-    // создаём задание
-    const task = this.taskRepo.create({
-      fileName,
-      filePath,
-      createdBy: creator,
-      commission,
-    });
-    const savedTask = await this.taskRepo.save(task);
+        const commission = await this.commissionsRepo.findOne({
+            where: { id: dto.commissionId },
+            relations: ['users'],
+        });
+        if (!commission) throw new NotFoundException('Commission not found');
 
-    // создаём подписи для всех участников комиссии
-    const signatures = commission.users.map((u) =>
-      this.signatureRepo.create({ task: savedTask, user: u }),
-    );
-    await this.signatureRepo.save(signatures);
+        // создаем задачу
+        const task = this.tasksRepo.create({
+            title: dto.title,
+            creator,
+            commission,
+            status: 'in_progress',
+            filePath: filePath,
+        });
+        await this.tasksRepo.save(task);
 
-    return this.taskRepo.findOneOrFail({
-      where: { id: savedTask.id },
-      relations: ['signatures', 'signatures.user', 'commission', 'createdBy'],
-    });
-  }
+        // создаем записи о подписях для всех членов комиссии
+        const signs = commission.users.map((user) =>
+            this.taskSignsRepo.create({
+                task,
+                user,
+                isSigned: false,
+            }),
+        );
 
-  // Получить все задания
-  async getAllTasks(): Promise<Task[]> {
-    return this.taskRepo.find({
-      relations: ['signatures', 'signatures.user', 'commission', 'createdBy'],
-    });
-  }
+        await this.taskSignsRepo.save(signs);
 
-  // Получить одно задание
-  async getTaskById(id: number): Promise<Task> {
-    try {
-      return await this.taskRepo.findOneOrFail({
-        where: { id },
-        relations: ['signatures', 'signatures.user', 'commission', 'createdBy'],
-      });
-    } catch (error) {
-      throw new NotFoundException('Задание не найдено');
-    }
-  }
-
-  // Подписать задание
-  async signTask(taskId: number, userId: number): Promise<TaskSignature> {
-    const signature = await this.signatureRepo.findOne({
-      where: { task: { id: taskId }, user: { id: userId } },
-      relations: ['task', 'user'],
-    });
-
-    if (!signature) throw new NotFoundException('Подпись не найдена');
-
-    signature.signed = true;
-    signature.signedAt = new Date();
-
-    return this.signatureRepo.save(signature);
+        // подгружаем обратно с relation
+        return this.tasksRepo.findOneOrFail({
+            where: { id: task.id },
+            relations: ['creator', 'commission', 'signs', 'signs.user'],
+        });
   }
 }

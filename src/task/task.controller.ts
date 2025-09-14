@@ -1,54 +1,35 @@
-import {
-  Controller,
-  Post,
-  Get,
-  Body,
-  Param,
-  ParseIntPipe,
-} from '@nestjs/common';
-import { TaskService } from './task.service';
+import { Controller, Post, Body, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { TasksService } from './task.service';
+import { CreateTaskDto } from './dto/create-task.dto';
+import { Task } from './task.entity';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('tasks')
-export class TaskController {
-  constructor(private readonly taskService: TaskService) {}
+export class TasksController {
+  constructor(private readonly tasksService: TasksService) { }
 
-  // Создать задание
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads/tmp', // временно кладём сюда
+        filename: (req, file, callback) => {
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          callback(null, uniqueSuffix + extname(file.originalname));
+        },
+      }),
+    }),
+  )
   async createTask(
-    @Body()
-    body: {
-      fileName: string;
-      filePath: string;
-      createdById: number;
-      commissionId: number;
-    },
+    @Body() dto: CreateTaskDto,
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.taskService.createTask(
-      body.fileName,
-      body.filePath,
-      body.createdById,
-      body.commissionId,
-    );
-  }
-
-  // Получить все задания
-  @Get()
-  async getAll() {
-    return this.taskService.getAllTasks();
-  }
-
-  // Получить одно задание
-  @Get(':id')
-  async getOne(@Param('id', ParseIntPipe) id: number) {
-    return this.taskService.getTaskById(id);
-  }
-
-  // Подписать задание
-  @Post(':id/sign')
-  async sign(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() body: { userId: number },
-  ) {
-    return this.taskService.signTask(id, body.userId);
+    return this.tasksService.create(dto, file?.path);
   }
 }

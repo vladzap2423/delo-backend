@@ -54,8 +54,9 @@ export class TasksService {
         });
     }
 
-    async findAll(): Promise<Task[]> {
+    async findInProgressTask(): Promise<Task[]> {
     return this.tasksRepo.find({
+        where: { status: 'in_progress' },
         relations: ['creator', 'commission', 'signs', 'signs.user'],
         order: { createdAt: 'DESC' },
     });

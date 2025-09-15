@@ -7,7 +7,6 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Task } from './task.entity';
 
 @Controller('tasks')
 export class TasksController {
@@ -18,7 +17,7 @@ export class TasksController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './uploads/tmp', // временно
+        destination: './uploads/tmp', // временно кладём сюда
         filename: (req, file, callback) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
           callback(null, uniqueSuffix + extname(file.originalname));

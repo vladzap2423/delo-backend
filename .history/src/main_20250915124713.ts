@@ -1,27 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { UsersService } from './users/users.service';
-import { ClassSerializerInterceptor } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
   app.enableCors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true,
+    origin: process.env.FRFRONTEND_URL,
+    credential: true,
     exposedHeaders: 'set-cookie',
-  });
-
-  // включаем глобально @Exclude/@Expose
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-
-  const port = process.env.API_PORT;
-  if (port) {
-    await app.listen(port);
-  }
+  })
+  const port = process.env.API_PORT; // API_PORT из .env
+  await app.listen(port);
 
   console.log(`🚀 Server is running on http://localhost:${port}`);
+
 
   // Автосоздание админа
   const usersService = app.get(UsersService);

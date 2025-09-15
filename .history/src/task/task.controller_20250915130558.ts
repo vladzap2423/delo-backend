@@ -18,7 +18,7 @@ export class TasksController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './uploads/tmp', // временно
+        destination: './uploads/tmp', // временно кладём сюда
         filename: (req, file, callback) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
           callback(null, uniqueSuffix + extname(file.originalname));

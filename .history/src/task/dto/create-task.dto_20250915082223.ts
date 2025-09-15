@@ -10,5 +10,4 @@ export class CreateTaskDto {
 
     @IsNumber()
     commissionId: number;
-
 }

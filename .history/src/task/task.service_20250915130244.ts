@@ -54,11 +54,5 @@ export class TasksService {
         });
     }
 
-    async findAll(): Promise<Task[]> {
-    return this.tasksRepo.find({
-        relations: ['creator', 'commission', 'signs', 'signs.user'],
-        order: { createdAt: 'DESC' },
-    });
-    }
-
+    
 }

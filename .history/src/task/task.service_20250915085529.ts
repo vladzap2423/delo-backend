@@ -21,18 +21,18 @@ export class TasksService {
         if (!creator) throw new NotFoundException('Creator not found');
 
         const commission = await this.commissionsRepo.findOne({
-            where: { id: body.commissionId },
+            where: { id: dto.commissionId },
             relations: ['users'],
         });
         if (!commission) throw new NotFoundException('Commission not found');
 
         // создаем задачу
         const task = this.tasksRepo.create({
-            title: body.title,
+            title: dto.title,
             creator,
             commission,
             status: 'in_progress',
-            filePath: `uploads/tmp/${file.filename}`,
+            filePath: file.filename,
         });
         await this.tasksRepo.save(task);
 
@@ -52,13 +52,5 @@ export class TasksService {
             where: { id: task.id },
             relations: ['creator', 'commission', 'signs', 'signs.user'],
         });
-    }
-
-    async findAll(): Promise<Task[]> {
-    return this.tasksRepo.find({
-        relations: ['creator', 'commission', 'signs', 'signs.user'],
-        order: { createdAt: 'DESC' },
-    });
-    }
-
+  }
 }

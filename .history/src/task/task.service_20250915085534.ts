@@ -32,7 +32,7 @@ export class TasksService {
             creator,
             commission,
             status: 'in_progress',
-            filePath: `uploads/tmp/${file.filename}`,
+            filePath: file.filename,
         });
         await this.tasksRepo.save(task);
 
@@ -52,13 +52,5 @@ export class TasksService {
             where: { id: task.id },
             relations: ['creator', 'commission', 'signs', 'signs.user'],
         });
-    }
-
-    async findAll(): Promise<Task[]> {
-    return this.tasksRepo.find({
-        relations: ['creator', 'commission', 'signs', 'signs.user'],
-        order: { createdAt: 'DESC' },
-    });
-    }
-
+  }
 }

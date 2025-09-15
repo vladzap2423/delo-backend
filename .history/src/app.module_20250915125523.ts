@@ -2,8 +2,10 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
+import { User } from './users/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { CommissionModule } from './commissions/commission.module';
+
 import { TasksModule } from './task/task.module';
 
 @Module({

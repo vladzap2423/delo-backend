@@ -1,4 +1,3 @@
-import { Exclude } from 'class-transformer';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 
@@ -10,8 +9,7 @@ export class User {
     @Column({ unique: true })
     username: string;
 
-    @Column()
-    @Exclude()
+    @Column()""
     password: string;
 
     @Column()

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, Is } from 'class-validator';
 
 export class CreateTaskDto {
     @IsString()
@@ -10,8 +10,5 @@ export class CreateTaskDto {
 
     @IsNumber()
     commissionId: number;
-
-    @IsOptional()
-    signSchema?: string;
 
 }

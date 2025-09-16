@@ -75,38 +75,4 @@ export class TasksService {
     });
     }
 
-
-    async updateSignSchema(taskId: number, schema: string) {
-        const task = await this.tasksRepo.findOne({
-            where: { id: taskId },
-            relations: ['signs', 'signs.user'],
-        });
-        if (!task) throw new NotFoundException('Task not found');
-
-        let signSchema: any[];
-        try {
-            signSchema = JSON.parse(schema);
-        } catch {
-            throw new NotFoundException('Invalid schema JSON');
-        }
-
-        for (const s of task.signs) {
-            const slot = signSchema.find((sc) => sc.userId === s.user.id);
-            if (slot) {
-            s.page = slot.page;
-            s.x = slot.x;
-            s.y = slot.y;
-            s.width = slot.width;
-            s.height = slot.height;
-            }
-        }
-
-        await this.taskSignsRepo.save(task.signs);
-        return this.tasksRepo.findOne({
-            where: { id: taskId },
-            relations: ['creator', 'commission', 'signs', 'signs.user'],
-        });
-    }
-
-
 }

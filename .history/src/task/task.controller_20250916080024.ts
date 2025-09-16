@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UploadedFile, UseInterceptors, Get, Param, Patch } from '@nestjs/common';
+import { Controller, Post, Body, UploadedFile, UseInterceptors, Get } from '@nestjs/common';
 import { TasksService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UseGuards } from '@nestjs/common';
@@ -37,15 +37,6 @@ export class TasksController {
   @Get()
   async getAllTasks(): Promise<Task[]> {
     return this.tasksService.findAll();
-  }
-
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Patch(':id/sign-schema')
-  async updateSignSchema(
-    @Param('id') taskId: number,
-    @Body('schema') schema: string,
-  ) {
-    return this.tasksService.updateSignSchema(taskId, schema);
   }
 
   

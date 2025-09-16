@@ -40,13 +40,13 @@ export class TasksController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Patch(':id/sign-schema')
-  async updateSignSchema(
-    @Param('id') taskId: number,
-    @Body('schema') schema: string,
-  ) {
-    return this.tasksService.updateSignSchema(taskId, schema);
-  }
+@Patch(':id/sign-schema')
+async updateSignSchema(
+  @Param('id') taskId: number,
+  @Body('schema') schema: string,
+) {
+  return this.tasksService.updateSignSchema(taskId, schema);
+}
 
   
 }

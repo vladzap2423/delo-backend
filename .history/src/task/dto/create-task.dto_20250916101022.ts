@@ -12,6 +12,5 @@ export class CreateTaskDto {
     commissionId: number;
 
     @IsOptional()
-    signSchema?: string;
 
 }

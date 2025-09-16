@@ -46,17 +46,8 @@ export class TasksService {
         }
         const signs = commission.users.map((user) => {
             const slot = signSchema.find((s) => s.userId === user.id);
-            return this.taskSignsRepo.create({
-                task,
-                user,
-                isSigned: false,
-                page: slot?.page || null,
-                x: slot?.x || null,
-                y: slot?.y || null,
-                width: slot?.width || null,
-                height: slot?.height || null
-            })
-        
+            return
+        }
         });
 
         await this.taskSignsRepo.save(signs);
@@ -74,39 +65,5 @@ export class TasksService {
         order: { createdAt: 'DESC' },
     });
     }
-
-
-    async updateSignSchema(taskId: number, schema: string) {
-        const task = await this.tasksRepo.findOne({
-            where: { id: taskId },
-            relations: ['signs', 'signs.user'],
-        });
-        if (!task) throw new NotFoundException('Task not found');
-
-        let signSchema: any[];
-        try {
-            signSchema = JSON.parse(schema);
-        } catch {
-            throw new NotFoundException('Invalid schema JSON');
-        }
-
-        for (const s of task.signs) {
-            const slot = signSchema.find((sc) => sc.userId === s.user.id);
-            if (slot) {
-            s.page = slot.page;
-            s.x = slot.x;
-            s.y = slot.y;
-            s.width = slot.width;
-            s.height = slot.height;
-            }
-        }
-
-        await this.taskSignsRepo.save(task.signs);
-        return this.tasksRepo.findOne({
-            where: { id: taskId },
-            relations: ['creator', 'commission', 'signs', 'signs.user'],
-        });
-    }
-
 
 }

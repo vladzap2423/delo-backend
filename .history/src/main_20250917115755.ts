@@ -7,8 +7,6 @@ import { Reflector } from '@nestjs/core';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.getHttpAdapter().getInstance().set('etag', false);
-
   app.enableCors({
     origin: true,
     credentials: true,
@@ -20,7 +18,7 @@ async function bootstrap() {
 
   const port = process.env.API_PORT;
   if (port) {
-    await app.listen(port, "0.0.0.0");
+    await app.listen(port, "");
   }
 
   console.log(`🚀 Server is running on http://localhost:${port}`);

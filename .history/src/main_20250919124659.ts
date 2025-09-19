@@ -2,9 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { UsersService } from './users/users.service';
 import { ClassSerializerInterceptor } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import * as express from "express";
-import { join } from "path";
+import { Reflector } from '@nestjs/core';import * as express from "express";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

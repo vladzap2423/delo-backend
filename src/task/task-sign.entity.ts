@@ -3,7 +3,6 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  CreateDateColumn,
 } from 'typeorm';
 import { User } from 'src/users/user.entity';
 import { Task } from './task.entity';
@@ -22,7 +21,7 @@ export class TaskSign {
   @Column({ default: false })
   isSigned: boolean;
 
-  @CreateDateColumn()
+  @Column({ nullable: true })
   signedAt: Date;
 
   @Column({ nullable: true })

@@ -36,28 +36,14 @@ export class TasksService {
         });
         await this.tasksRepo.save(task);
 
-        let signSchema: any[] = [];
-        if (body.signSchema) {
-            try {
-            signSchema = JSON.parse(body.signSchema);
-            } catch (e) {
-            throw new NotFoundException('Invalid signSchema JSON');
-            }
-        }
-        const signs = commission.users.map((user) => {
-            const slot = signSchema.find((s) => s.userId === user.id);
-            return this.taskSignsRepo.create({
+        const signs = commission.users.map((user) =>
+            this.taskSignsRepo.create({
                 task,
                 user,
                 isSigned: false,
-                page: slot?.page || null,
-                x: slot?.x || null,
-                y: slot?.y || null,
-                width: slot?.width || null,
-                height: slot?.height || null
             })
         
-        });
+        );
 
         await this.taskSignsRepo.save(signs);
 

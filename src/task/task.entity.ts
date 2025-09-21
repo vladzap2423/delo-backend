@@ -35,7 +35,7 @@ export class Task {
   @OneToMany(() => TaskSign, (sign) => sign.task, { cascade: true })
   signs: TaskSign[];
 
-  @CreateDateColumn()
+  @Column({ nullable: true })
   createdAt: Date;
 
   @UpdateDateColumn()
@@ -43,4 +43,7 @@ export class Task {
 
   @Column({ default: 'in_progress' })
   status: 'in_progress' | 'completed';
+
+  @Column({ nullable: true })
+  sigPath: string | null
 }

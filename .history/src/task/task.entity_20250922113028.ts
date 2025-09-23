@@ -19,15 +19,19 @@ export class Task {
   @Column()
   title: string;
 
+  // путь к подписанному файлу (в папке)
   @Column({ nullable: true })
   filePath: string;
 
+  // кто создал задачу
   @ManyToOne(() => User, { eager: true })
   creator: User;
 
+  // комиссия, назначенная для рассмотрения
   @ManyToOne(() => Commission, { eager: true })
   commission: Commission;
 
+  // статусы подписей
   @OneToMany(() => TaskSign, (sign) => sign.task, { cascade: true })
   signs: TaskSign[];
 

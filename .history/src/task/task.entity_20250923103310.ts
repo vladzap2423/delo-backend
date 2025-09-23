@@ -28,6 +28,7 @@ export class Task {
   @ManyToOne(() => Commission, { eager: true })
   commission: Commission;
 
+  // статусы подписей
   @OneToMany(() => TaskSign, (sign) => sign.task, { cascade: true })
   signs: TaskSign[];
 

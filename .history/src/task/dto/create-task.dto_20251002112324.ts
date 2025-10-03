@@ -19,8 +19,7 @@ export class CreateTaskDto {
     width: number;
     height: number;
     };
-    
     @IsNumber()
-    signOrder: number[];
+    
 
 }

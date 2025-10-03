@@ -12,15 +12,5 @@ export class CreateTaskDto {
     commissionId: number;
 
     @IsOptional()
-    signArea?: {
-    page: number;
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    };
-    
-    @IsNumber()
-    signOrder: number[];
 
 }

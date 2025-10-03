@@ -40,9 +40,6 @@ export class Task {
   @Column({ default: 'in_progress' })
   status: 'in_progress' | 'completed';
 
-  @Column({ type: 'int', nullable: true })
-  signOrder: number;
-
   @Column({ type: 'jsonb', nullable: true })
   signArea: {
     page: number;

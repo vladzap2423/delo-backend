@@ -23,12 +23,6 @@ export class TaskSign {
 
   @Column({ nullable: true })
   signedAt: Date;
-
-  // Порядковый индекс ячейки в общем прямоугольнике
-  @Column({ type: 'int', nullable: true })
-  slotIndex: number;
-
-  // Прямоугольник, выделенный под подпись конкретного пользователя
   @Column({ type: 'jsonb', nullable: true })
   slotRect: {
     page: number;
@@ -37,8 +31,4 @@ export class TaskSign {
     width: number;
     height: number;
   };
-
-  // Очерёдность подписания (задана на фронте)
-  @Column({ type: 'int', nullable: true })
-  signOrder: number;
 }
